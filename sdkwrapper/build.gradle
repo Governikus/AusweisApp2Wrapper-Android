@@ -1,0 +1,137 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-parcelize'
+apply plugin: 'kotlin-kapt'
+apply plugin: "org.jmailen.kotlinter"
+apply plugin: 'maven-publish'
+
+android {
+    compileSdkVersion 33
+    namespace "de.governikus.ausweisapp2.sdkwrapper"
+
+    defaultConfig {
+        buildToolsVersion "30.0.3"
+        minSdkVersion 24
+        targetSdkVersion 33
+        versionCode 2
+        versionName sdkwrapper_version
+        archivesBaseName = "sdkwrapper"
+
+        consumerProguardFiles 'consumer-rules.pro'
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        testOptions.unitTests.includeAndroidResources = true
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+        allWarningsAsErrors = true
+        freeCompilerArgs = ["-opt-in=kotlin.RequiresOptIn"] // Used for UnitTests, can be removed with kotlin 1.7.0
+    }
+
+    lintOptions {
+        setLintConfig(file("../lint.xml"))
+        checkDependencies false
+        warningsAsErrors true
+    }
+
+    buildFeatures {
+        dataBinding = true
+    }
+
+    buildTypes {
+        debug {
+            minifyEnabled false
+        }
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    libraryVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = "${archivesBaseName}-${variant.name}-${defaultConfig.versionName}.aar"
+        }
+    }
+
+    publishing {
+        singleVariant("release")
+    }
+
+    packagingOptions {
+        jniLibs {
+            useLegacyPackaging = true
+        }
+    }
+}
+
+task sourceJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    archiveClassifier = "sources"
+    archiveVersion = android.defaultConfig.versionName
+}
+
+afterEvaluate {
+    publishing {
+        repositories {
+            maven {
+                name = 'Local'
+                url "$project.rootDir/build/dist/libs"
+            }
+            maven {
+                name = 'Nexus'
+                credentials {
+                    username System.getenv("NEXUS_USERNAME")
+                    password System.getenv("NEXUS_PSW")
+                }
+                url = System.getenv("NEXUS_URL")
+            }
+        }
+        publications {
+            snapshot(MavenPublication) {
+                from components.release
+                groupId = 'de.governikus.ausweisapp2'
+                artifactId = 'sdkwrapper'
+                version = "${android.defaultConfig.versionName}-SNAPSHOT"
+
+                artifact(sourceJar)
+            }
+            release(MavenPublication) {
+                from components.release
+                pom {
+                    name = 'AusweisApp2 SDK Wrapper'
+                    description = 'Convenient authentication SDK'
+                    url = 'https://www.governikus.de'
+                }
+                groupId = 'de.governikus.ausweisapp2'
+                artifactId = 'sdkwrapper'
+                version = android.defaultConfig.versionName
+
+                artifact(sourceJar)
+            }
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation "com.governikus:ausweisapp:1.26.3"
+    implementation 'com.google.code.gson:gson:2.10.1'
+
+    testImplementation "junit:junit:4.13.2"
+    testImplementation 'androidx.test:core:1.5.0'
+    testImplementation 'org.robolectric:robolectric:4.9.2'
+    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4'
+
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    androidTestImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4'
+
+}
