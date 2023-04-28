@@ -516,7 +516,7 @@ class WorkflowController internal constructor(private val sdkConnection: SdkConn
                         callback { onChangePinStarted() }
                     }
                     else -> {
-                        callback { onChangePinCompleted(ChangePinResult(message.success)) }
+                        callback { onChangePinCompleted(ChangePinResult(message.success, message.reason)) }
                     }
                 }
             }

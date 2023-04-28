@@ -119,10 +119,23 @@ afterEvaluate {
     }
 }
 
-dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+def useLocal = file("${rootDir}/libs/ausweisapp2.aar").exists();
 
-    implementation "com.governikus:ausweisapp:1.26.3"
+dependencies {
+    if (useLocal) {
+        implementation project(':libs')
+        if(useLocal) {
+                println "⚠   ⚠   ⚠   ⚠   WARNING  ⚠   ⚠   ⚠   ⚠\n" +
+                "   Using local SDK might be outdated  \n" +
+                "⚠  Delete local SDK in lib folder to ⚠\n" +
+                "   use latest version!                \n" +
+                "⚠   ⚠   ⚠   ⚠   WARNING  ⚠   ⚠   ⚠   ⚠"
+        }
+    }
+    else {
+        implementation 'com.governikus:ausweisapp:1.26.4'
+    }
+
     implementation 'com.google.code.gson:gson:2.10.1'
 
     testImplementation "junit:junit:4.13.2"

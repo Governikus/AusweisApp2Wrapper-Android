@@ -106,7 +106,6 @@ internal class AA2SdkConnection : WorkflowController.SdkConnection {
 
         return try {
             val messageJson = gson.toJson(command)
-            Log.d(TAG, "Send message: $messageJson")
             sdk.send(sessionId, messageJson)
         } catch (e: RemoteException) {
             Log.d(TAG, "Could not send command", e)

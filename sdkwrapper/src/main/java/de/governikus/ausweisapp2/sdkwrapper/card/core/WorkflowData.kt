@@ -148,12 +148,14 @@ data class AuthResult(
 /**
  * Final result of a PIN change.
  *
- * @property success True if a the PIN has been successfully set, else false
+ * @property success True if a the PIN has been successfully set, else false.
+ * @property reason Unique error code if the PIN change failed.
  */
 
 @Parcelize
 data class ChangePinResult(
-    val success: Boolean
+    val success: Boolean,
+    val reason: String?
 ) : Parcelable
 
 /**
