@@ -33,6 +33,7 @@ import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
+import kotlin.time.Duration.Companion.milliseconds
 
 @RunWith(RobolectricTestRunner::class)
 @Config(manifest = Config.NONE, sdk = [24])
@@ -61,7 +62,7 @@ class WorkflowControllerTest {
     }
 
     @Test
-    fun testOnStarted() = runTest(dispatchTimeoutMs = 1000) {
+    fun testOnStarted() = runTest(timeout = 1000.milliseconds) {
         assertNotNull(workflowController)
         val workflowController = workflowController!!
 
@@ -82,7 +83,7 @@ class WorkflowControllerTest {
     }
 
     @Test
-    fun testErrorNotStarted() = runTest(dispatchTimeoutMs = 1000) {
+    fun testErrorNotStarted() = runTest(timeout = 1000.milliseconds) {
         assertNotNull(workflowController)
         val workflowController = workflowController!!
 
@@ -103,7 +104,7 @@ class WorkflowControllerTest {
     }
 
     @Test
-    fun testAuthenticationStarted() = runTest(dispatchTimeoutMs = 1000) {
+    fun testAuthenticationStarted() = runTest(timeout = 1000.milliseconds) {
         assertNotNull(workflowController)
         assertNotNull(connection)
         val workflowController = workflowController!!
@@ -137,7 +138,7 @@ class WorkflowControllerTest {
     }
 
     @Test
-    fun testFullAuthentication() = runTest(dispatchTimeoutMs = 1000) {
+    fun testFullAuthentication() = runTest(timeout = 1000.milliseconds) {
         assertNotNull(workflowController)
         assertNotNull(connection)
         val workflowController = workflowController!!

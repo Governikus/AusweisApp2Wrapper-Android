@@ -1,6 +1,7 @@
 buildscript {
-    ext.kotlin_version = '1.8.10'
-    ext.sdkwrapper_version = "1.26.4.0"
+    ext.kotlin_version = '1.8.21'
+    ext.ausweisapp_version = '1.26.5'
+    ext.sdkwrapper_version = "$ausweisapp_version.0"
 
     repositories {
         google()
@@ -28,7 +29,7 @@ allprojects {
     repositories {
         google()
         mavenCentral()
-        maven { url "$project.rootDir/libs" }
+        maven { url "$project.rootDir/ausweisapp" }
     }
 }
 
@@ -36,7 +37,7 @@ task tarball(type: Tar) {
     into ('/') {
         from rootDir
         include '**'
-        exclude ('**/build/**', 'tester', '.reviewboardrc', '.gradle', '.idea', 'jenkins')
+        exclude ('**/build/**', 'tester', '.reviewboardrc', '.gradle', '.idea', 'jenkins', '**/*.aar')
      }
 
     destinationDirectory = file('build/tar')

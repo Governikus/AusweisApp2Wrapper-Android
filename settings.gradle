@@ -1,1 +1,1 @@
-include ':tester', ':sdkwrapper', ':libs'
+include ':tester', ':sdkwrapper', ':ausweisapp'

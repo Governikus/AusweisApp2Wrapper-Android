@@ -1,2 +1,4 @@
 configurations.maybeCreate("default")
 artifacts.add("default", file('ausweisapp2.aar'))
+group = 'com.governikus'
+version = ausweisapp_version

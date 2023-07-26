@@ -10,7 +10,7 @@ android {
     namespace "de.governikus.ausweisapp2.sdkwrapper"
 
     defaultConfig {
-        buildToolsVersion "30.0.3"
+        buildToolsVersion "33.0.2"
         minSdkVersion 24
         targetSdkVersion 33
         versionCode 2
@@ -119,32 +119,30 @@ afterEvaluate {
     }
 }
 
-def useLocal = file("${rootDir}/libs/ausweisapp2.aar").exists();
+def useLocal = file("${rootDir}/ausweisapp/ausweisapp2.aar").exists();
 
 dependencies {
     if (useLocal) {
-        implementation project(':libs')
-        if(useLocal) {
-                println "⚠   ⚠   ⚠   ⚠   WARNING  ⚠   ⚠   ⚠   ⚠\n" +
-                "   Using local SDK might be outdated  \n" +
-                "⚠  Delete local SDK in lib folder to ⚠\n" +
-                "   use latest version!                \n" +
-                "⚠   ⚠   ⚠   ⚠   WARNING  ⚠   ⚠   ⚠   ⚠"
-        }
+        implementation project(':ausweisapp')
+        println "⚠   ⚠   ⚠   ⚠   WARNING  ⚠   ⚠   ⚠   ⚠\n" +
+        "   Using local SDK might be outdated  \n" +
+        "⚠  Delete local SDK in lib folder to ⚠\n" +
+        "   use latest version!                \n" +
+        "⚠   ⚠   ⚠   ⚠   WARNING  ⚠   ⚠   ⚠   ⚠"
     }
     else {
-        implementation 'com.governikus:ausweisapp:1.26.4'
+        implementation "com.governikus:ausweisapp:$ausweisapp_version"
     }
 
     implementation 'com.google.code.gson:gson:2.10.1'
 
     testImplementation "junit:junit:4.13.2"
     testImplementation 'androidx.test:core:1.5.0'
-    testImplementation 'org.robolectric:robolectric:4.9.2'
-    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4'
+    testImplementation 'org.robolectric:robolectric:4.10.3'
+    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.1'
 
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
-    androidTestImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4'
+    androidTestImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.1'
 
 }
