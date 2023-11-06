@@ -43,8 +43,8 @@ internal fun Message.getCertificateDescription(): CertificateDescription? {
         description.termsOfUsage,
         CertificateValidity(
             issueDate,
-            expirationDate
-        )
+            expirationDate,
+        ),
     )
 }
 
@@ -54,7 +54,7 @@ internal fun Message.getCard(): Card? {
     return Card(
         card.deactivated,
         card.inoperative,
-        card.retryCounter
+        card.retryCounter,
     )
 }
 
@@ -63,7 +63,7 @@ internal fun Message.getApiLevel(): ApiLevel? {
 
     return ApiLevel(
         available,
-        current
+        current,
     )
 }
 
@@ -78,7 +78,7 @@ internal fun Message.getReaderFromRoot(): Reader? {
         insertable,
         attached,
         keypad,
-        getCard()
+        getCard(),
     )
 }
 
@@ -94,7 +94,7 @@ internal fun Message.getReaderFromReaderMember(): Reader? {
         insertable,
         attached,
         keypad,
-        getCard()
+        getCard(),
     )
 }
 
@@ -102,21 +102,22 @@ internal fun Message.getReaderList(): List<Reader>? {
     val readers = readers ?: return null
 
     return readers.map {
-        val card = if (it.card == null) {
-            null
-        } else {
-            Card(
-                it.card.deactivated,
-                it.card.inoperative,
-                it.card.retryCounter
-            )
-        }
+        val card =
+            if (it.card == null) {
+                null
+            } else {
+                Card(
+                    it.card.deactivated,
+                    it.card.inoperative,
+                    it.card.retryCounter,
+                )
+            }
         Reader(
             it.name,
             it.insertable,
             it.attached,
             it.keypad,
-            card
+            card,
         )
     }
 }
@@ -131,21 +132,22 @@ internal fun Message.getVersionInfo(): VersionInfo? {
         info.implementationVersion,
         info.specificationTitle,
         info.specificationVendor,
-        info.specificationVersion
+        info.specificationVersion,
     )
 }
 
 internal fun Message.getAccessRights(): AccessRights? {
     val chat = chat ?: return null
 
-    val auxiliaryData = aux?.run {
-        AuxiliaryData(
-            if (ageVerificationDate != null) dateFormat.parse(ageVerificationDate) else null,
-            requiredAge?.toInt(),
-            if (validityDate != null) dateFormat.parse(validityDate) else null,
-            communityId
-        )
-    }
+    val auxiliaryData =
+        aux?.run {
+            AuxiliaryData(
+                if (ageVerificationDate != null) dateFormat.parse(ageVerificationDate) else null,
+                requiredAge?.toInt(),
+                if (validityDate != null) dateFormat.parse(validityDate) else null,
+                communityId,
+            )
+        }
 
     val requiredRights = chat.required.mapNotNull { AccessRight.fromRawName(it) }
     val optionalRights = chat.optional.mapNotNull { AccessRight.fromRawName(it) }
@@ -156,7 +158,7 @@ internal fun Message.getAccessRights(): AccessRights? {
         optionalRights,
         effectiveRights,
         transactionInfo,
-        auxiliaryData
+        auxiliaryData,
     )
 }
 
@@ -181,7 +183,7 @@ internal fun Message.getAuthResultData(): AuthResultData? {
         result.language,
         result.description,
         result.message,
-        result.reason
+        result.reason,
     )
 }
 

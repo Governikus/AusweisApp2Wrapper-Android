@@ -21,7 +21,6 @@ import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.Comma
 import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.Message
 
 internal class AA2SdkConnection : WorkflowController.SdkConnection {
-
     private var context: Context? = null
     private var sdkConnection: ServiceConnection? = null
     private var sdk: IAusweisApp2Sdk? = null
@@ -36,58 +35,66 @@ internal class AA2SdkConnection : WorkflowController.SdkConnection {
         context: Context,
         onConnected: (() -> Unit)?,
         onConnectionFailed: (() -> Unit)?,
-        onMessageReceived: ((message: Message) -> Unit)?
+        onMessageReceived: ((message: Message) -> Unit)?,
     ) {
         this.context = context.applicationContext
         val serviceIntent = Intent("com.governikus.ausweisapp2.START_SERVICE")
         serviceIntent.setPackage(context.applicationContext.packageName)
 
-        val sdkCallback = object : IAusweisApp2SdkCallback.Stub() {
-            override fun sessionIdGenerated(sessionId: String, isSecureSessionId: Boolean) {
-                this@AA2SdkConnection.sdkSessionId = sessionId
-            }
+        val sdkCallback =
+            object : IAusweisApp2SdkCallback.Stub() {
+                override fun sessionIdGenerated(
+                    sessionId: String,
+                    isSecureSessionId: Boolean,
+                ) {
+                    this@AA2SdkConnection.sdkSessionId = sessionId
+                }
 
-            override fun receive(messageJson: String) {
-                Log.d(TAG, "Received message: $messageJson")
+                override fun receive(messageJson: String) {
+                    Log.d(TAG, "Received message: $messageJson")
 
-                try {
-                    val message = gson.fromJson(messageJson, Message::class.java)
-                    onMessageReceived?.invoke(message)
-                } catch (e: JsonSyntaxException) {
-                    Log.e(TAG, "Could not parse json message", e)
+                    try {
+                        val message = gson.fromJson(messageJson, Message::class.java)
+                        onMessageReceived?.invoke(message)
+                    } catch (e: JsonSyntaxException) {
+                        Log.e(TAG, "Could not parse json message", e)
+                    }
+                }
+
+                override fun sdkDisconnected() {
+                    sdkSessionId = null
                 }
             }
 
-            override fun sdkDisconnected() {
-                sdkSessionId = null
-            }
-        }
+        sdkConnection =
+            object : ServiceConnection {
+                override fun onServiceConnected(
+                    className: ComponentName,
+                    service: IBinder,
+                ) {
+                    try {
+                        sdk = IAusweisApp2Sdk.Stub.asInterface(service)
+                        sdk?.connectSdk(sdkCallback)
+                        onConnected?.invoke()
+                    } catch (e: RemoteException) {
+                        Log.d(TAG, "Could not connect to ausweisapp2 sdk", e)
+                        onConnectionFailed?.invoke()
+                    }
+                }
 
-        sdkConnection = object : ServiceConnection {
-            override fun onServiceConnected(className: ComponentName, service: IBinder) {
+                override fun onServiceDisconnected(className: ComponentName) {
+                    Log.d(TAG, "Service disconnected")
+                    sdk = null
+                    sdkSessionId = null
+                }
+            }.apply {
                 try {
-                    sdk = IAusweisApp2Sdk.Stub.asInterface(service)
-                    sdk?.connectSdk(sdkCallback)
-                    onConnected?.invoke()
-                } catch (e: RemoteException) {
-                    Log.d(TAG, "Could not connect to ausweisapp2 sdk", e)
+                    context.bindService(serviceIntent, this, Context.BIND_AUTO_CREATE)
+                } catch (e: SecurityException) {
+                    Log.d(TAG, "Could not bind service", e)
                     onConnectionFailed?.invoke()
                 }
             }
-
-            override fun onServiceDisconnected(className: ComponentName) {
-                Log.d(TAG, "Service disconnected")
-                sdk = null
-                sdkSessionId = null
-            }
-        }.apply {
-            try {
-                context.bindService(serviceIntent, this, Context.BIND_AUTO_CREATE)
-            } catch (e: SecurityException) {
-                Log.d(TAG, "Could not bind service", e)
-                onConnectionFailed?.invoke()
-            }
-        }
     }
 
     override fun unbind() {

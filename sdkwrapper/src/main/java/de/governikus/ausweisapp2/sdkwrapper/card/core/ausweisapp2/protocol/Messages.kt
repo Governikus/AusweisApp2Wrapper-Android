@@ -52,7 +52,7 @@ internal data class Message(
     val validity: Validity?,
     @SerializedName("VersionInfo")
     val versionInfo: VersionInfo?,
-    val workflow: String?
+    val workflow: String?,
 )
 
 internal data class Description(
@@ -61,31 +61,31 @@ internal data class Description(
     val purpose: String,
     val subjectName: String,
     val subjectUrl: String,
-    val termsOfUsage: String
+    val termsOfUsage: String,
 )
 
 internal data class Validity(
     val effectiveDate: String,
-    val expirationDate: String
+    val expirationDate: String,
 )
 
 internal data class Chat(
     val effective: List<String>,
     val optional: List<String>,
-    val required: List<String>
+    val required: List<String>,
 )
 
 internal data class Aux(
     val ageVerificationDate: String?,
     val requiredAge: String?,
     val validityDate: String?,
-    val communityId: String?
+    val communityId: String?,
 )
 
 internal data class Card(
     val inoperative: Boolean,
     val deactivated: Boolean,
-    val retryCounter: Int
+    val retryCounter: Int,
 )
 
 internal data class Reader(
@@ -93,7 +93,7 @@ internal data class Reader(
     val insertable: Boolean,
     val attached: Boolean,
     val keypad: Boolean,
-    val card: Card?
+    val card: Card?,
 )
 
 internal data class Result(
@@ -102,7 +102,7 @@ internal data class Result(
     val language: String?,
     val description: String?,
     val message: String?,
-    val reason: String?
+    val reason: String?,
 )
 
 internal data class VersionInfo(
@@ -119,5 +119,5 @@ internal data class VersionInfo(
     @SerializedName("Specification-Vendor")
     val specificationVendor: String,
     @SerializedName("Specification-Version")
-    val specificationVersion: String
+    val specificationVersion: String,
 )

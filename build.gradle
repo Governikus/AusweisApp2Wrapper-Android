@@ -1,6 +1,6 @@
 buildscript {
-    ext.kotlin_version = '1.8.21'
-    ext.ausweisapp_version = '1.26.5'
+    ext.kotlin_version = '1.9.20'
+    ext.ausweisapp_version = '2.0.0'
     ext.sdkwrapper_version = "$ausweisapp_version.0"
 
     repositories {
@@ -9,27 +9,45 @@ buildscript {
             url "https://plugins.gradle.org/m2/"
         }
         mavenCentral()
+        gradlePluginPortal()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.4.2'
+        classpath 'com.android.tools.build:gradle:8.1.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "org.jmailen.gradle:kotlinter-gradle:3.13.0"
-        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:2.5.3"
+        classpath "org.jmailen.gradle:kotlinter-gradle:4.0.0"
+        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:2.7.5"
+        classpath 'com.github.ben-manes:gradle-versions-plugin:+'
     }
 }
 
 plugins {
-    id("org.sonarqube") version "3.5.0.2730"
+    id("org.sonarqube") version "4.4.1.3373"
     id("java")
 }
 
 version = sdkwrapper_version
 
+def isNonStable = { String version ->
+  def stableKeyword = ['RELEASE', 'FINAL', 'GA'].any { it -> version.toUpperCase().contains(it) }
+  def regex = /^[0-9,.v-]+(-r)?$/
+  return !stableKeyword && !(version ==~ regex)
+}
+
 allprojects {
     repositories {
         google()
         mavenCentral()
+        maven {
+            url "https://repo.govkg.de/repository/maven-public"
+        }
         maven { url "$project.rootDir/ausweisapp" }
+    }
+    apply plugin: com.github.benmanes.gradle.versions.VersionsPlugin
+    tasks.named("dependencyUpdates").configure {
+      checkForGradleUpdate = false
+      rejectVersionIf {
+        isNonStable(it.candidate.version) && !isNonStable(it.currentVersion)
+      }
     }
 }
 

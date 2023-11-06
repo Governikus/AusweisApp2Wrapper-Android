@@ -22,7 +22,7 @@ import android.nfc.tech.IsoDep
  */
 class NfcForegroundDispatcher(
     private val activity: Activity,
-    private val workflowController: WorkflowController
+    private val workflowController: WorkflowController,
 ) {
     private val nfcAdapter by lazy {
         getDefaultAdapter(activity)
@@ -45,7 +45,7 @@ class NfcForegroundDispatcher(
                 }
             },
             nfcReaderFlags,
-            null
+            null,
         )
     }
 

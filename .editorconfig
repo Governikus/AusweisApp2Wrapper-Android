@@ -1,2 +1,2 @@
 [*.{kt,kts}]
-kotlin_disabled_rules = no-wildcard-imports, import-ordering
+ktlint_standard_max-line-length = disabled

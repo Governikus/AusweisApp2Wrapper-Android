@@ -65,17 +65,20 @@ import kotlinx.coroutines.launch
  * [WorkflowController] is used to control the authentication and pin change workflow
  */
 class WorkflowController internal constructor(private val sdkConnection: SdkConnection) {
-
     internal interface SdkConnection {
         val isConnected: Boolean
+
         fun bind(
             context: Context,
             onConnected: (() -> Unit)? = null,
             onConnectionFailed: (() -> Unit)? = null,
-            onMessageReceived: ((message: Message) -> Unit)? = null
+            onMessageReceived: ((message: Message) -> Unit)? = null,
         )
+
         fun unbind()
+
         fun updateNfcTag(tag: Tag): Boolean
+
         fun <T : Command> send(command: T): Boolean
     }
 
@@ -113,7 +116,7 @@ class WorkflowController internal constructor(private val sdkConnection: SdkConn
             },
             onMessageReceived = { messageJson ->
                 handleMessage(messageJson)
-            }
+            },
         )
     }
 
@@ -175,7 +178,11 @@ class WorkflowController internal constructor(private val sdkConnection: SdkConn
      * @param status True to enable automatic STATUS messages, which are delivered by
      * callbacks to [WorkflowCallbacks.onStatus].
      */
-    fun startAuthentication(tcTokenUrl: Uri, developerMode: Boolean = false, status: Boolean = true) {
+    fun startAuthentication(
+        tcTokenUrl: Uri,
+        developerMode: Boolean = false,
+        status: Boolean = true,
+    ) {
         send(RunAuth(tcTokenUrl.toString(), developerMode, status))
     }
 
@@ -360,7 +367,10 @@ class WorkflowController internal constructor(private val sdkConnection: SdkConn
      * @param name Name of [Reader] with a [Card] that shall be used.
      * @param simulator Specific data for [Simulator]. (optional) files: Content of card Filesystem.
      */
-    fun setCard(name: String, simulator: Simulator?) {
+    fun setCard(
+        name: String,
+        simulator: Simulator?,
+    ) {
         send(SetCard(name, workflowSimulatorToCommandSimulator(simulator)))
     }
 
@@ -452,13 +462,14 @@ class WorkflowController internal constructor(private val sdkConnection: SdkConn
         }
     }
 
-    private inline fun <reified T : Command> send(command: T) = SDKWrapper.launch(Dispatchers.IO) {
-        if (isStarted) {
-            sdkConnection.send(command)
-        } else {
-            callback { onWrapperError(WrapperError("WorkflowController::send: isStarted", "Not started")) }
+    private inline fun <reified T : Command> send(command: T) =
+        SDKWrapper.launch(Dispatchers.IO) {
+            if (isStarted) {
+                sdkConnection.send(command)
+            } else {
+                callback { onWrapperError(WrapperError("WorkflowController::send: isStarted", "Not started")) }
+            }
         }
-    }
 
     private fun callback(callback: WorkflowCallbacks.() -> Unit) =
         SDKWrapper.launch(Dispatchers.Main) {

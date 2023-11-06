@@ -7,7 +7,7 @@ package de.governikus.ausweisapp2.sdkwrapper.card.core
 import android.net.Uri
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
-import java.util.*
+import java.util.Date
 
 /**
  * Detailed description of the certificate.
@@ -28,7 +28,7 @@ data class CertificateDescription(
     val subjectName: String,
     val subjectUrl: Uri?,
     val termsOfUsage: String,
-    val validity: CertificateValidity
+    val validity: CertificateValidity,
 ) : Parcelable
 
 /**
@@ -40,7 +40,7 @@ data class CertificateDescription(
 @Parcelize
 data class CertificateValidity(
     val effectiveDate: Date,
-    val expirationDate: Date
+    val expirationDate: Date,
 ) : Parcelable
 
 /**
@@ -58,7 +58,7 @@ data class AccessRights(
     val optionalRights: List<AccessRight>,
     val effectiveRights: List<AccessRight>,
     val transactionInfo: String?,
-    val auxiliaryData: AuxiliaryData?
+    val auxiliaryData: AuxiliaryData?,
 ) : Parcelable
 
 /**
@@ -74,7 +74,7 @@ data class AuxiliaryData(
     val ageVerificationDate: Date?,
     val requiredAge: Int?,
     val validityDate: Date?,
-    val communityId: String?
+    val communityId: String?,
 ) : Parcelable
 
 /**
@@ -88,7 +88,7 @@ data class AuxiliaryData(
 data class Card(
     val deactivated: Boolean,
     val inoperative: Boolean,
-    val pinRetryCounter: Int
+    val pinRetryCounter: Int,
 ) : Parcelable
 
 /**
@@ -98,7 +98,7 @@ data class Card(
  */
 @Parcelize
 data class Simulator(
-    val files: List<SimulatorFile>
+    val files: List<SimulatorFile>,
 ) : Parcelable
 
 /**
@@ -118,7 +118,7 @@ data class Simulator(
 data class SimulatorFile(
     val fileId: String,
     val shortFileId: String,
-    val content: String
+    val content: String,
 ) : Parcelable
 
 /**
@@ -130,7 +130,7 @@ data class SimulatorFile(
 @Parcelize
 data class ApiLevel(
     val available: List<Int>?,
-    val current: Int
+    val current: Int,
 ) : Parcelable
 
 /**
@@ -142,7 +142,7 @@ data class ApiLevel(
 @Parcelize
 data class AuthResult(
     val url: Uri?,
-    val result: AuthResultData?
+    val result: AuthResultData?,
 ) : Parcelable
 
 /**
@@ -155,7 +155,7 @@ data class AuthResult(
 @Parcelize
 data class ChangePinResult(
     val success: Boolean,
-    val reason: String?
+    val reason: String?,
 ) : Parcelable
 
 /**
@@ -175,7 +175,7 @@ data class AuthResultData(
     val language: String?,
     val description: String?,
     val message: String?,
-    val reason: String?
+    val reason: String?,
 ) : Parcelable
 
 /**
@@ -193,7 +193,7 @@ data class Reader(
     val insertable: Boolean,
     val attached: Boolean,
     val keypad: Boolean,
-    val card: Card?
+    val card: Card?,
 ) : Parcelable
 
 /**
@@ -216,7 +216,7 @@ data class VersionInfo(
     val implementationVersion: String,
     val specificationTitle: String,
     val specificationVendor: String,
-    val specificationVersion: String
+    val specificationVersion: String,
 ) : Parcelable
 
 /**
@@ -228,7 +228,7 @@ data class VersionInfo(
 @Parcelize
 data class WrapperError(
     val msg: String,
-    val error: String
+    val error: String,
 ) : Parcelable
 
 /**
@@ -245,7 +245,7 @@ data class WrapperError(
 data class WorkflowProgress(
     val workflow: WorkflowProgressType?,
     val progress: Int?,
-    val state: String?
+    val state: String?,
 ) : Parcelable
 
 /**
@@ -275,7 +275,8 @@ enum class AccessRight(val rawName: String) {
     WRITE_RESIDENCE_PERMIT_I("WriteResidencePermitI"),
     WRITE_RESIDENCE_PERMIT_II("WriteResidencePermitII"),
     CAN_ALLOWED("CanAllowed"),
-    PIN_MANAGEMENT("PinManagement");
+    PIN_MANAGEMENT("PinManagement"),
+    ;
 
     companion object {
         fun fromRawName(rawName: String) = values().firstOrNull { it.rawName == rawName }
@@ -287,7 +288,8 @@ enum class AccessRight(val rawName: String) {
  */
 enum class WorkflowProgressType(val rawName: String) {
     AUTHENTICATION("AUTH"),
-    CHANGE_PIN("CHANGE_PIN");
+    CHANGE_PIN("CHANGE_PIN"),
+    ;
 
     companion object {
         fun fromRawName(rawName: String?) = values().firstOrNull { it.rawName == rawName }

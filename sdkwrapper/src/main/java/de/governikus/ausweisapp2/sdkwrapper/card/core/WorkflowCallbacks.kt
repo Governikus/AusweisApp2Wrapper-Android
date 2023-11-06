@@ -12,7 +12,6 @@ package de.governikus.ausweisapp2.sdkwrapper.card.core
  * @see WorkflowController.registerCallbacks
  */
 interface WorkflowCallbacks {
-
     /**
      * [WorkflowController] has successfully been initialized.
      */
@@ -62,7 +61,10 @@ interface WorkflowCallbacks {
      * @param error Optional error message if the call to [WorkflowController.setAccessRights] failed.
      * @param accessRights Requested access rights.
      */
-    fun onAccessRights(error: String?, accessRights: AccessRights?)
+    fun onAccessRights(
+        error: String?,
+        accessRights: AccessRights?,
+    )
 
     /**
      * Provides information about the used certificate.
@@ -107,7 +109,10 @@ interface WorkflowCallbacks {
      * @param error Optional error message if the call to [WorkflowController.setPin] failed.
      * @param reader Reader the PIN is requested for
      */
-    fun onEnterPin(error: String?, reader: Reader)
+    fun onEnterPin(
+        error: String?,
+        reader: Reader,
+    )
 
     /**
      * Indicates that a new PIN is required to continue the workflow.
@@ -117,7 +122,10 @@ interface WorkflowCallbacks {
      * @param error Optional error message if the call to [WorkflowController.setNewPin] failed.
      * @param reader Reader the new PIN is requested for
      */
-    fun onEnterNewPin(error: String?, reader: Reader)
+    fun onEnterNewPin(
+        error: String?,
+        reader: Reader,
+    )
 
     /**
      * Indicates that a PUK is required to continue the workflow.
@@ -127,7 +135,10 @@ interface WorkflowCallbacks {
      * @param error Optional error message if the call to [WorkflowController.setPuk] failed.
      * @param reader Reader the PUK is requested for
      */
-    fun onEnterPuk(error: String?, reader: Reader)
+    fun onEnterPuk(
+        error: String?,
+        reader: Reader,
+    )
 
     /**
      * Indicates that a CAN is required to continue workflow.
@@ -137,7 +148,10 @@ interface WorkflowCallbacks {
      * @param error Optional error message if the call to [WorkflowController.setCan] failed.
      * @param reader Reader the CAN is requested for
      */
-    fun onEnterCan(error: String?, reader: Reader)
+    fun onEnterCan(
+        error: String?,
+        reader: Reader,
+    )
 
     /**
      * Indicates that the pin change workflow is completed.
@@ -172,7 +186,10 @@ interface WorkflowCallbacks {
      * @param error Optional error message if WorkflowController.setApiLevel() failed.
      * @param apiLevel Contains information about the supported and employed API level.
      */
-    fun onApiLevel(error: String?, apiLevel: ApiLevel?)
+    fun onApiLevel(
+        error: String?,
+        apiLevel: ApiLevel?,
+    )
 
     /**
      * Provides information about the AusweisApp2 that is used in the SDK Wrapper.

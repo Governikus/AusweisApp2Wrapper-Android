@@ -9,7 +9,7 @@ internal typealias CommandSimulatorFile = de.governikus.ausweisapp2.sdkwrapper.c
 internal fun workflowSimulatorToCommandSimulator(simulator: WorkflowSimulator?): CommandSimulator? {
     simulator ?: return null
     return CommandSimulator(
-        simulator.files.map { workflowSimulatorFileToCommandSimulatorFile(it) }
+        simulator.files.map { workflowSimulatorFileToCommandSimulatorFile(it) },
     )
 }
 
@@ -17,6 +17,6 @@ internal fun workflowSimulatorFileToCommandSimulatorFile(file: WorkflowSimulator
     return CommandSimulatorFile(
         file.fileId,
         file.shortFileId,
-        file.content
+        file.content,
     )
 }
