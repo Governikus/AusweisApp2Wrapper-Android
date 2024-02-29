@@ -1,6 +1,6 @@
 buildscript {
-    ext.kotlin_version = '1.9.20'
-    ext.ausweisapp_version = '2.0.0'
+    ext.kotlin_version = '1.9.22'
+    ext.ausweisapp_version = '2.1.0'
     ext.sdkwrapper_version = "$ausweisapp_version.0"
 
     repositories {
@@ -12,10 +12,10 @@ buildscript {
         gradlePluginPortal()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.1.2'
+        classpath 'com.android.tools.build:gradle:8.2.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "org.jmailen.gradle:kotlinter-gradle:4.0.0"
-        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:2.7.5"
+        classpath "org.jmailen.gradle:kotlinter-gradle:4.2.0"
+        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:2.7.7"
         classpath 'com.github.ben-manes:gradle-versions-plugin:+'
     }
 }
