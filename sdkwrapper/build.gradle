@@ -101,6 +101,15 @@ afterEvaluate {
                 version = "${android.defaultConfig.versionName}-SNAPSHOT"
 
                 artifact(sourceJar)
+
+                pom {
+                    licenses {
+                        license {
+                            name = 'EUPL-v1.2'
+                            url = 'https://eupl.eu/1.2/en/'
+                        }
+                    }
+                }
             }
             release(MavenPublication) {
                 from components.release
@@ -114,6 +123,15 @@ afterEvaluate {
                 version = android.defaultConfig.versionName
 
                 artifact(sourceJar)
+
+                pom {
+                    licenses {
+                        license {
+                            name = 'EUPL-v1.2'
+                            url = 'https://eupl.eu/1.2/en/'
+                        }
+                    }
+                }
             }
         }
     }
