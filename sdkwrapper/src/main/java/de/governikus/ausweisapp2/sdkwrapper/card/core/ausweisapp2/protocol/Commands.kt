@@ -16,12 +16,8 @@ internal class Cancel : Command {
     override val cmd = "CANCEL"
 }
 
-internal class SetApiLevel(val level: Int) : Command {
-    override val cmd = "SET_API_LEVEL"
-}
-
-internal class GetApiLevel : Command {
-    override val cmd = "GET_API_LEVEL"
+internal class ContinueWorkflow : Command {
+    override val cmd = "CONTINUE"
 }
 
 internal class GetCertificate : Command {

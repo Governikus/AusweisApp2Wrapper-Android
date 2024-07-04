@@ -11,7 +11,6 @@ import android.nfc.tech.IsoDep
 import android.util.Log
 import de.governikus.ausweisapp2.sdkwrapper.SDKWrapper
 import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.getAccessRights
-import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.getApiLevel
 import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.getAuthResult
 import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.getCertificateDescription
 import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.getReaderFromReaderMember
@@ -22,8 +21,8 @@ import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.getWorkflowPro
 import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.Accept
 import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.Cancel
 import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.Command
+import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.ContinueWorkflow
 import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.GetAccessRights
-import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.GetApiLevel
 import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.GetCertificate
 import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.GetInfo
 import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.GetReader
@@ -31,7 +30,6 @@ import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.GetRe
 import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.GetStatus
 import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.Message
 import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.Messages.MSG_ACCESS_RIGHTS
-import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.Messages.MSG_API_LEVEL
 import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.Messages.MSG_AUTH
 import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.Messages.MSG_BAD_STATE
 import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.Messages.MSG_CERTIFICATE
@@ -44,6 +42,7 @@ import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.Messa
 import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.Messages.MSG_INSERT_CARD
 import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.Messages.MSG_INTERNAL_ERROR
 import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.Messages.MSG_INVALID
+import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.Messages.MSG_PAUSE
 import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.Messages.MSG_READER
 import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.Messages.MSG_READER_LIST
 import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.Messages.MSG_STATUS
@@ -51,7 +50,6 @@ import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.Messa
 import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.RunAuth
 import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.RunChangePin
 import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.SetAccessRights
-import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.SetApiLevel
 import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.SetCan
 import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.SetCard
 import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.SetNewPin
@@ -237,30 +235,6 @@ class WorkflowController internal constructor(private val sdkConnection: SdkConn
     }
 
     /**
-     * Set supported API level of your application.
-     *
-     * If you initially develop your application against the SDK Wrapper you should check
-     * the highest supported level with getApiLevel() and set this value with this command
-     * when you connect to the SDK Wrapper.
-     * This will set the SDK Wrapper to act with the defined level even if a newer level is available.
-     * The SDK Wrapper will call [WorkflowCallbacks.onApiLevel] as an answer.
-     *
-     * @param level Supported API level of your app.
-     */
-    fun setApiLevel(level: Int) {
-        send(SetApiLevel(level))
-    }
-
-    /**
-     * Returns information about the available and current API level.
-     *
-     * The SDK will call [WorkflowCallbacks.onApiLevel] as an answer.
-     */
-    fun getApiLevel() {
-        send(GetApiLevel())
-    }
-
-    /**
      * Provides information about the utilized AusweisApp2.
      *
      * The SDK Wrapper will call [WorkflowCallbacks.onInfo] as an answer.
@@ -402,6 +376,13 @@ class WorkflowController internal constructor(private val sdkConnection: SdkConn
     }
 
     /**
+     * Resumes the workflow after a callback to [WorkflowCallbacks.onPause].
+     */
+    fun continueWorkflow() {
+        send(ContinueWorkflow())
+    }
+
+    /**
      * Request the certificate of current authentication.
      *
      * The SDK will call [WorkflowCallbacks.onCertificate] as an answer.
@@ -480,9 +461,6 @@ class WorkflowController internal constructor(private val sdkConnection: SdkConn
 
     private fun handleMessage(message: Message) {
         when (message.msg) {
-            MSG_API_LEVEL -> {
-                callback { onApiLevel(message.error, message.getApiLevel()) }
-            }
             MSG_INFO -> {
                 when (val info = message.getVersionInfo()) {
                     null -> {
@@ -583,6 +561,23 @@ class WorkflowController internal constructor(private val sdkConnection: SdkConn
                         callback { onCertificate(certificateDescription) }
                     }
                 }
+            }
+            MSG_PAUSE -> {
+                val rawCause = message.cause
+                if (rawCause == null) {
+                    val error = WrapperError(message.msg, "Missing cause object")
+                    callback { onWrapperError(error) }
+                    return
+                }
+
+                val cause = Cause.fromRawName(rawCause)
+                if (cause == null) {
+                    val error = WrapperError(message.msg, "Failed to map cause \"$rawCause\" to PauseReason")
+                    callback { onWrapperError(error) }
+                    return
+                }
+
+                callback { onPause(cause) }
             }
             MSG_READER -> {
                 callback { onReader(message.getReaderFromRoot()) }

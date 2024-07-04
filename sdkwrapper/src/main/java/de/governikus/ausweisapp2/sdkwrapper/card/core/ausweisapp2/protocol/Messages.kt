@@ -8,7 +8,6 @@ import com.google.gson.annotations.SerializedName
 
 internal object Messages {
     const val MSG_ACCESS_RIGHTS = "ACCESS_RIGHTS"
-    const val MSG_API_LEVEL = "API_LEVEL"
     const val MSG_AUTH = "AUTH"
     const val MSG_BAD_STATE = "BAD_STATE"
     const val MSG_CERTIFICATE = "CERTIFICATE"
@@ -21,6 +20,7 @@ internal object Messages {
     const val MSG_INSERT_CARD = "INSERT_CARD"
     const val MSG_INTERNAL_ERROR = "INTERNAL_ERROR"
     const val MSG_INVALID = "INVALID"
+    const val MSG_PAUSE = "PAUSE"
     const val MSG_READER = "READER"
     const val MSG_READER_LIST = "READER_LIST"
     const val MSG_STATUS = "STATUS"
@@ -30,10 +30,9 @@ internal object Messages {
 internal data class Message(
     val attached: Boolean?,
     val aux: Aux?,
-    val available: List<Int>?,
     val card: Card?,
+    val cause: String?,
     val chat: Chat?,
-    val current: Int?,
     val description: Description?,
     val error: String?,
     val insertable: Boolean?,
@@ -83,9 +82,9 @@ internal data class Aux(
 )
 
 internal data class Card(
-    val inoperative: Boolean,
-    val deactivated: Boolean,
-    val retryCounter: Int,
+    val inoperative: Boolean?,
+    val deactivated: Boolean?,
+    val retryCounter: Int?,
 )
 
 internal data class Reader(

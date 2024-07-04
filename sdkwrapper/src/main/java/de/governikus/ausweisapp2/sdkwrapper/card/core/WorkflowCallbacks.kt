@@ -88,6 +88,15 @@ interface WorkflowCallbacks {
     fun onInsertCard(error: String?)
 
     /**
+     * Called if the SDK is waiting on a certain condition to be met.
+     *
+     * After resolving the cause of the issue, the workflow has to be resumed by calling [WorkflowController.continueWorkflow].
+     *
+     * @param cause The cause for the waiting condition
+     */
+    fun onPause(cause: Cause)
+
+    /**
      * A specific reader was recognized or has vanished. Also called as a response to [WorkflowController.getReader].
      *
      * @param reader Recognized or vanished reader, might be null if an unknown reader was requested  in [WorkflowController.getReader].
@@ -177,19 +186,6 @@ interface WorkflowCallbacks {
      * @param workflowProgress Holds information about the current workflow progress.
      */
     fun onStatus(workflowProgress: WorkflowProgress)
-
-    /**
-     * Provides information about the supported API level of the employed AusweisApp2
-     *
-     * Response to a call to WorkflowController.getApiLevel() and WorkflowController.setApiLevel().
-     *
-     * @param error Optional error message if WorkflowController.setApiLevel() failed.
-     * @param apiLevel Contains information about the supported and employed API level.
-     */
-    fun onApiLevel(
-        error: String?,
-        apiLevel: ApiLevel?,
-    )
 
     /**
      * Provides information about the AusweisApp2 that is used in the SDK Wrapper.

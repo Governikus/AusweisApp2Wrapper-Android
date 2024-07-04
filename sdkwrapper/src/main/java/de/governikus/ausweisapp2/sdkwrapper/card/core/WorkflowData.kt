@@ -80,25 +80,46 @@ data class AuxiliaryData(
 /**
  * Provides information about inserted card.
  *
+ * An unknown card (without eID function) is represented by all properties set to null.
+ *
  * @property inoperative True if PUK is inoperative and cannot unblock PIN, otherwise false. This can be recognized if user enters a correct PUK only. It is not possible to read this data before a user tries to unblock the PIN.
  * @property deactivated True if eID functionality is deactivated, otherwise false.
  * @property pinRetryCounter Count of possible retries for the PIN. If you enter a PIN it will be decreased if PIN was incorrect.
  */
 @Parcelize
 data class Card(
-    val deactivated: Boolean,
-    val inoperative: Boolean,
-    val pinRetryCounter: Int,
+    val deactivated: Boolean?,
+    val inoperative: Boolean?,
+    val pinRetryCounter: Int?,
 ) : Parcelable
 
 /**
- * Optional definition of files for the Simulator reader.
+ * Convenience method to check if an unknown card (without eID function) was detected.
+ */
+fun Card.isUnknown(): Boolean = inoperative == null && deactivated == null && pinRetryCounter == null
+
+/**
+ * List of possible causes in [WorkflowCallbacks.onPause]
+ */
+enum class Cause(val rawName: String) {
+    BadCardPosition("BadCardPosition"), // Denotes an unstable or lost card connection.
+    ;
+
+    companion object {
+        fun fromRawName(name: String?): Cause? = values().firstOrNull { it.rawName == name }
+    }
+}
+
+/**
+ * Optional definition of files and keys for the Simulator reader.
  *
  * @property files List of Filesystem definitions. See [SimulatorFile].
+ * @property keys List of SimulatorKey definitions. See [SimulatorKey].
  */
 @Parcelize
 data class Simulator(
     val files: List<SimulatorFile>,
+    val keys: List<SimulatorKey>?,
 ) : Parcelable
 
 /**
@@ -122,15 +143,14 @@ data class SimulatorFile(
 ) : Parcelable
 
 /**
- * Provides information about the API Level of the underlying AusweisApp2.
+ * Keys for Simulator reader
  *
- * @property available List of all available API levels of the employed AusweisApp2.
- * @property current The currently set API level.
+ * The keys are used to check the blacklist and calculate the pseudonym for the service provider.
  */
 @Parcelize
-data class ApiLevel(
-    val available: List<Int>?,
-    val current: Int,
+data class SimulatorKey(
+    val id: Int,
+    val content: String,
 ) : Parcelable
 
 /**

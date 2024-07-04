@@ -7,7 +7,6 @@ package de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2
 import android.net.Uri
 import de.governikus.ausweisapp2.sdkwrapper.card.core.AccessRight
 import de.governikus.ausweisapp2.sdkwrapper.card.core.AccessRights
-import de.governikus.ausweisapp2.sdkwrapper.card.core.ApiLevel
 import de.governikus.ausweisapp2.sdkwrapper.card.core.AuthResult
 import de.governikus.ausweisapp2.sdkwrapper.card.core.AuthResultData
 import de.governikus.ausweisapp2.sdkwrapper.card.core.AuxiliaryData
@@ -55,15 +54,6 @@ internal fun Message.getCard(): Card? {
         card.deactivated,
         card.inoperative,
         card.retryCounter,
-    )
-}
-
-internal fun Message.getApiLevel(): ApiLevel? {
-    val current = current ?: return null
-
-    return ApiLevel(
-        available,
-        current,
     )
 }
 

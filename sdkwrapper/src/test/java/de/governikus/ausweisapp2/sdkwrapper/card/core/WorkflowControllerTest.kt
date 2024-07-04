@@ -36,7 +36,7 @@ import kotlin.coroutines.suspendCoroutine
 import kotlin.time.Duration.Companion.milliseconds
 
 @RunWith(RobolectricTestRunner::class)
-@Config(manifest = Config.NONE, sdk = [26])
+@Config(manifest = Config.NONE, sdk = [28])
 @OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
 class WorkflowControllerTest {
     private var workflowController: WorkflowController? = null
@@ -388,14 +388,11 @@ internal open class TestWorkflowCallbacks : WorkflowCallbacks {
 
     override fun onStatus(workflowProgress: WorkflowProgress) {}
 
-    override fun onApiLevel(
-        error: String?,
-        apiLevel: ApiLevel?,
-    ) {}
-
     override fun onInfo(versionInfo: VersionInfo) {}
 
     override fun onBadState(error: String) {}
 
     override fun onInternalError(error: String) {}
+
+    override fun onPause(cause: Cause) {}
 }

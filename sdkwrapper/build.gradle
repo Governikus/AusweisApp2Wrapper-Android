@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         buildToolsVersion "34.0.0"
-        minSdkVersion 26
+        minSdkVersion 28
         targetSdkVersion 34
         versionCode 4
         versionName sdkwrapper_version
@@ -137,7 +137,7 @@ afterEvaluate {
     }
 }
 
-def useLocal = file("${rootDir}/ausweisapp/ausweisapp2.aar").exists();
+def useLocal = file("${rootDir}/ausweisapp/ausweisapp.aar").exists();
 
 dependencies {
     if (useLocal) {

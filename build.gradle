@@ -1,7 +1,7 @@
 buildscript {
     ext.kotlin_version = '1.9.22'
-    ext.ausweisapp_version = '2.1.1'
-    ext.sdkwrapper_version = "$ausweisapp_version.0"
+    ext.ausweisapp_version = '2.2.0'
+    ext.sdkwrapper_version = "$ausweisapp_version"
 
     repositories {
         google()
@@ -21,7 +21,7 @@ buildscript {
 }
 
 plugins {
-    id("org.sonarqube") version "4.4.1.3373"
+    id("org.sonarqube") version "5.0.0.4638"
     id("java")
 }
 
