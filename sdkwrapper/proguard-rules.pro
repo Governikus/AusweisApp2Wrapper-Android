@@ -3,34 +3,39 @@
 -keepattributes RuntimeVisibleAnnotations
 -keep class androidx.databinding.** { *; }
 
--keep class de.governikus.ausweisapp2.sdkwrapper.DataBinderMapperImpl { *; }
--keep class de.governikus.ausweisapp2.sdkwrapper.DataBinderMapperImpl$** { *; }
+-keep class com.governikus.ausweisapp.sdkwrapper.DataBinderMapperImpl { *; }
+-keep class com.governikus.ausweisapp.sdkwrapper.DataBinderMapperImpl$** { *; }
 
--keep class de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.** { *; }
--keep class de.governikus.ausweisapp2.sdkwrapper.card.core.CertificateDescription { *; }
--keep class de.governikus.ausweisapp2.sdkwrapper.card.core.CertificateValidity { *; }
--keep class de.governikus.ausweisapp2.sdkwrapper.card.core.AccessRights { *; }
--keep class de.governikus.ausweisapp2.sdkwrapper.card.core.AuxiliaryData { *; }
--keep class de.governikus.ausweisapp2.sdkwrapper.card.core.Card { *; }
--keep class de.governikus.ausweisapp2.sdkwrapper.card.core.AuthResult { *; }
--keep class de.governikus.ausweisapp2.sdkwrapper.card.core.AuthResultData { *; }
--keep class de.governikus.ausweisapp2.sdkwrapper.card.core.WrapperError { *; }
--keep class de.governikus.ausweisapp2.sdkwrapper.card.core.ChangePinResult { *; }
--keep enum de.governikus.ausweisapp2.sdkwrapper.card.core.AccessRight { *; }
--keep enum de.governikus.ausweisapp2.sdkwrapper.card.core.WorkflowProgressType { *; }
+-keep class com.governikus.ausweisapp.sdkwrapper.card.core.ausweisapp.protocol.** { *; }
+-keep class com.governikus.ausweisapp.sdkwrapper.card.core.CertificateDescription { *; }
+-keep class com.governikus.ausweisapp.sdkwrapper.card.core.CertificateValidity { *; }
+-keep class com.governikus.ausweisapp.sdkwrapper.card.core.AccessRights { *; }
+-keep class com.governikus.ausweisapp.sdkwrapper.card.core.AuxiliaryData { *; }
+-keep class com.governikus.ausweisapp.sdkwrapper.card.core.Card { *; }
+-keep class com.governikus.ausweisapp.sdkwrapper.card.core.Cause { *; }
+-keep class com.governikus.ausweisapp.sdkwrapper.card.core.Reader { *; }
+-keep class com.governikus.ausweisapp.sdkwrapper.card.core.Simulator { *; }
+-keep class com.governikus.ausweisapp.sdkwrapper.card.core.AuthResult { *; }
+-keep class com.governikus.ausweisapp.sdkwrapper.card.core.AuthResultData { *; }
+-keep class com.governikus.ausweisapp.sdkwrapper.card.core.VersionInfo { *; }
+-keep class com.governikus.ausweisapp.sdkwrapper.card.core.WorkflowProgress { *; }
+-keep class com.governikus.ausweisapp.sdkwrapper.card.core.WrapperError { *; }
+-keep class com.governikus.ausweisapp.sdkwrapper.card.core.ChangePinResult { *; }
+-keep enum com.governikus.ausweisapp.sdkwrapper.card.core.AccessRight { *; }
+-keep enum com.governikus.ausweisapp.sdkwrapper.card.core.WorkflowProgressType { *; }
 
--keep class de.governikus.ausweisapp2.sdkwrapper.card.core.NfcForegroundDispatcher { *; }
+-keep class com.governikus.ausweisapp.sdkwrapper.card.core.NfcForegroundDispatcher { *; }
 
--keep public interface de.governikus.ausweisapp2.sdkwrapper.card.core.WorkflowCallbacks { *; }
--keep public class de.governikus.ausweisapp2.sdkwrapper.card.core.WorkflowController {
+-keep public interface com.governikus.ausweisapp.sdkwrapper.card.core.WorkflowCallbacks { *; }
+-keep public class com.governikus.ausweisapp.sdkwrapper.card.core.WorkflowController {
     public <methods>;
     public <fields>;
 }
 
--keep class de.governikus.ausweisapp2.sdkwrapper.SDKWrapper$** {
+-keep class com.governikus.ausweisapp.sdkwrapper.SDKWrapper$** {
     public <methods>;
 }
--keep class de.governikus.ausweisapp2.sdkwrapper.SDKWrapper {
+-keep class com.governikus.ausweisapp.sdkwrapper.SDKWrapper {
     public *;
 }
 

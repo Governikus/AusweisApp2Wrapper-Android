@@ -2,7 +2,7 @@
  * Copyright (c) 2020-2023 Governikus GmbH & Co. KG, Germany
  */
 
-package de.governikus.ausweisapp2.sdkwrapper.card.core
+package com.governikus.ausweisapp.sdkwrapper.card.core
 
 import android.net.Uri
 import android.os.Parcelable
@@ -91,17 +91,19 @@ data class Card(
     val deactivated: Boolean?,
     val inoperative: Boolean?,
     val pinRetryCounter: Int?,
-) : Parcelable
-
-/**
- * Convenience method to check if an unknown card (without eID function) was detected.
- */
-fun Card.isUnknown(): Boolean = inoperative == null && deactivated == null && pinRetryCounter == null
+) : Parcelable {
+    /**
+     * Convenience method to check if an unknown card (without eID function) was detected.
+     */
+    fun isUnknown(): Boolean = inoperative == null && deactivated == null && pinRetryCounter == null
+}
 
 /**
  * List of possible causes in [WorkflowCallbacks.onPause]
  */
-enum class Cause(val rawName: String) {
+enum class Cause(
+    val rawName: String,
+) {
     BadCardPosition("BadCardPosition"), // Denotes an unstable or lost card connection.
     ;
 
@@ -271,7 +273,9 @@ data class WorkflowProgress(
 /**
  * List of all available access rights a provider might request.
  */
-enum class AccessRight(val rawName: String) {
+enum class AccessRight(
+    val rawName: String,
+) {
     ADDRESS("Address"),
     BIRTH_NAME("BirthName"),
     FAMILY_NAME("FamilyName"),
@@ -306,7 +310,9 @@ enum class AccessRight(val rawName: String) {
 /**
  * List of all types of WorkflowProgress
  */
-enum class WorkflowProgressType(val rawName: String) {
+enum class WorkflowProgressType(
+    val rawName: String,
+) {
     AUTHENTICATION("AUTH"),
     CHANGE_PIN("CHANGE_PIN"),
     ;

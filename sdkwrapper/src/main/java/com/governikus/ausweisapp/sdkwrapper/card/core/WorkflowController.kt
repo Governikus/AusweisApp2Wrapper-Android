@@ -2,67 +2,69 @@
  * Copyright (c) 2020-2023 Governikus GmbH & Co. KG, Germany
  */
 
-package de.governikus.ausweisapp2.sdkwrapper.card.core
+package com.governikus.ausweisapp.sdkwrapper.card.core
 
 import android.content.Context
 import android.net.Uri
 import android.nfc.Tag
 import android.nfc.tech.IsoDep
 import android.util.Log
-import de.governikus.ausweisapp2.sdkwrapper.SDKWrapper
-import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.getAccessRights
-import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.getAuthResult
-import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.getCertificateDescription
-import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.getReaderFromReaderMember
-import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.getReaderFromRoot
-import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.getReaderList
-import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.getVersionInfo
-import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.getWorkflowProgress
-import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.Accept
-import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.Cancel
-import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.Command
-import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.ContinueWorkflow
-import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.GetAccessRights
-import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.GetCertificate
-import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.GetInfo
-import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.GetReader
-import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.GetReaderList
-import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.GetStatus
-import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.Message
-import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.Messages.MSG_ACCESS_RIGHTS
-import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.Messages.MSG_AUTH
-import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.Messages.MSG_BAD_STATE
-import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.Messages.MSG_CERTIFICATE
-import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.Messages.MSG_CHANGE_PIN
-import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.Messages.MSG_ENTER_CAN
-import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.Messages.MSG_ENTER_NEW_PIN
-import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.Messages.MSG_ENTER_PIN
-import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.Messages.MSG_ENTER_PUK
-import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.Messages.MSG_INFO
-import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.Messages.MSG_INSERT_CARD
-import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.Messages.MSG_INTERNAL_ERROR
-import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.Messages.MSG_INVALID
-import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.Messages.MSG_PAUSE
-import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.Messages.MSG_READER
-import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.Messages.MSG_READER_LIST
-import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.Messages.MSG_STATUS
-import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.Messages.MSG_UNKNOWN_COMMAND
-import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.RunAuth
-import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.RunChangePin
-import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.SetAccessRights
-import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.SetCan
-import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.SetCard
-import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.SetNewPin
-import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.SetPin
-import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.SetPuk
-import de.governikus.ausweisapp2.sdkwrapper.card.core.util.workflowSimulatorToCommandSimulator
+import com.governikus.ausweisapp.sdkwrapper.SDKWrapper
+import com.governikus.ausweisapp.sdkwrapper.card.core.ausweisapp.getAccessRights
+import com.governikus.ausweisapp.sdkwrapper.card.core.ausweisapp.getAuthResult
+import com.governikus.ausweisapp.sdkwrapper.card.core.ausweisapp.getCertificateDescription
+import com.governikus.ausweisapp.sdkwrapper.card.core.ausweisapp.getReaderFromReaderMember
+import com.governikus.ausweisapp.sdkwrapper.card.core.ausweisapp.getReaderFromRoot
+import com.governikus.ausweisapp.sdkwrapper.card.core.ausweisapp.getReaderList
+import com.governikus.ausweisapp.sdkwrapper.card.core.ausweisapp.getVersionInfo
+import com.governikus.ausweisapp.sdkwrapper.card.core.ausweisapp.getWorkflowProgress
+import com.governikus.ausweisapp.sdkwrapper.card.core.ausweisapp.protocol.Accept
+import com.governikus.ausweisapp.sdkwrapper.card.core.ausweisapp.protocol.Cancel
+import com.governikus.ausweisapp.sdkwrapper.card.core.ausweisapp.protocol.Command
+import com.governikus.ausweisapp.sdkwrapper.card.core.ausweisapp.protocol.ContinueWorkflow
+import com.governikus.ausweisapp.sdkwrapper.card.core.ausweisapp.protocol.GetAccessRights
+import com.governikus.ausweisapp.sdkwrapper.card.core.ausweisapp.protocol.GetCertificate
+import com.governikus.ausweisapp.sdkwrapper.card.core.ausweisapp.protocol.GetInfo
+import com.governikus.ausweisapp.sdkwrapper.card.core.ausweisapp.protocol.GetReader
+import com.governikus.ausweisapp.sdkwrapper.card.core.ausweisapp.protocol.GetReaderList
+import com.governikus.ausweisapp.sdkwrapper.card.core.ausweisapp.protocol.GetStatus
+import com.governikus.ausweisapp.sdkwrapper.card.core.ausweisapp.protocol.Message
+import com.governikus.ausweisapp.sdkwrapper.card.core.ausweisapp.protocol.Messages.MSG_ACCESS_RIGHTS
+import com.governikus.ausweisapp.sdkwrapper.card.core.ausweisapp.protocol.Messages.MSG_AUTH
+import com.governikus.ausweisapp.sdkwrapper.card.core.ausweisapp.protocol.Messages.MSG_BAD_STATE
+import com.governikus.ausweisapp.sdkwrapper.card.core.ausweisapp.protocol.Messages.MSG_CERTIFICATE
+import com.governikus.ausweisapp.sdkwrapper.card.core.ausweisapp.protocol.Messages.MSG_CHANGE_PIN
+import com.governikus.ausweisapp.sdkwrapper.card.core.ausweisapp.protocol.Messages.MSG_ENTER_CAN
+import com.governikus.ausweisapp.sdkwrapper.card.core.ausweisapp.protocol.Messages.MSG_ENTER_NEW_PIN
+import com.governikus.ausweisapp.sdkwrapper.card.core.ausweisapp.protocol.Messages.MSG_ENTER_PIN
+import com.governikus.ausweisapp.sdkwrapper.card.core.ausweisapp.protocol.Messages.MSG_ENTER_PUK
+import com.governikus.ausweisapp.sdkwrapper.card.core.ausweisapp.protocol.Messages.MSG_INFO
+import com.governikus.ausweisapp.sdkwrapper.card.core.ausweisapp.protocol.Messages.MSG_INSERT_CARD
+import com.governikus.ausweisapp.sdkwrapper.card.core.ausweisapp.protocol.Messages.MSG_INTERNAL_ERROR
+import com.governikus.ausweisapp.sdkwrapper.card.core.ausweisapp.protocol.Messages.MSG_INVALID
+import com.governikus.ausweisapp.sdkwrapper.card.core.ausweisapp.protocol.Messages.MSG_PAUSE
+import com.governikus.ausweisapp.sdkwrapper.card.core.ausweisapp.protocol.Messages.MSG_READER
+import com.governikus.ausweisapp.sdkwrapper.card.core.ausweisapp.protocol.Messages.MSG_READER_LIST
+import com.governikus.ausweisapp.sdkwrapper.card.core.ausweisapp.protocol.Messages.MSG_STATUS
+import com.governikus.ausweisapp.sdkwrapper.card.core.ausweisapp.protocol.Messages.MSG_UNKNOWN_COMMAND
+import com.governikus.ausweisapp.sdkwrapper.card.core.ausweisapp.protocol.RunAuth
+import com.governikus.ausweisapp.sdkwrapper.card.core.ausweisapp.protocol.RunChangePin
+import com.governikus.ausweisapp.sdkwrapper.card.core.ausweisapp.protocol.SetAccessRights
+import com.governikus.ausweisapp.sdkwrapper.card.core.ausweisapp.protocol.SetCan
+import com.governikus.ausweisapp.sdkwrapper.card.core.ausweisapp.protocol.SetCard
+import com.governikus.ausweisapp.sdkwrapper.card.core.ausweisapp.protocol.SetNewPin
+import com.governikus.ausweisapp.sdkwrapper.card.core.ausweisapp.protocol.SetPin
+import com.governikus.ausweisapp.sdkwrapper.card.core.ausweisapp.protocol.SetPuk
+import com.governikus.ausweisapp.sdkwrapper.card.core.util.workflowSimulatorToCommandSimulator
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 /**
  * [WorkflowController] is used to control the authentication and pin change workflow
  */
-class WorkflowController internal constructor(private val sdkConnection: SdkConnection) {
+class WorkflowController internal constructor(
+    private val sdkConnection: SdkConnection,
+) {
     internal interface SdkConnection {
         val isConnected: Boolean
 
@@ -81,6 +83,7 @@ class WorkflowController internal constructor(private val sdkConnection: SdkConn
     }
 
     private val workflowCallbacks = ArrayList<WorkflowCallbacks>()
+    private var isStarting: Boolean = false
 
     /**
      * Indicates that the [WorkflowController] is ready to be used.
@@ -98,17 +101,25 @@ class WorkflowController internal constructor(private val sdkConnection: SdkConn
      * @param context Context
      */
     fun start(context: Context) {
+        if (isStarting) {
+            Log.d(TAG, "WorkflowController is already starting")
+            return
+        }
         if (isStarted) {
             Log.d(TAG, "WorkflowController already started")
             return
         }
 
+        isStarting = true
+
         sdkConnection.bind(
             context,
             onConnected = {
+                isStarting = false
                 callback { onStarted() }
             },
             onConnectionFailed = {
+                isStarting = false
                 val error = WrapperError("WorkflowController::start", "Connection failed")
                 callback { onWrapperError(error) }
             },
@@ -125,11 +136,11 @@ class WorkflowController internal constructor(private val sdkConnection: SdkConn
      * resources.
      */
     fun stop() {
-        if (!isStarted) {
+        if (!isStarted && !isStarting) {
             Log.d(TAG, "WorkflowController not started")
             return
         }
-
+        isStarting = false
         sdkConnection.unbind()
     }
 

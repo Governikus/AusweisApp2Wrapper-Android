@@ -2,22 +2,22 @@
  * Copyright (c) 2020-2023 Governikus GmbH & Co. KG, Germany
  */
 
-package de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2
+package com.governikus.ausweisapp.sdkwrapper.card.core.ausweisapp
 
 import android.net.Uri
-import de.governikus.ausweisapp2.sdkwrapper.card.core.AccessRight
-import de.governikus.ausweisapp2.sdkwrapper.card.core.AccessRights
-import de.governikus.ausweisapp2.sdkwrapper.card.core.AuthResult
-import de.governikus.ausweisapp2.sdkwrapper.card.core.AuthResultData
-import de.governikus.ausweisapp2.sdkwrapper.card.core.AuxiliaryData
-import de.governikus.ausweisapp2.sdkwrapper.card.core.Card
-import de.governikus.ausweisapp2.sdkwrapper.card.core.CertificateDescription
-import de.governikus.ausweisapp2.sdkwrapper.card.core.CertificateValidity
-import de.governikus.ausweisapp2.sdkwrapper.card.core.Reader
-import de.governikus.ausweisapp2.sdkwrapper.card.core.VersionInfo
-import de.governikus.ausweisapp2.sdkwrapper.card.core.WorkflowProgress
-import de.governikus.ausweisapp2.sdkwrapper.card.core.WorkflowProgressType
-import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.Message
+import com.governikus.ausweisapp.sdkwrapper.card.core.AccessRight
+import com.governikus.ausweisapp.sdkwrapper.card.core.AccessRights
+import com.governikus.ausweisapp.sdkwrapper.card.core.AuthResult
+import com.governikus.ausweisapp.sdkwrapper.card.core.AuthResultData
+import com.governikus.ausweisapp.sdkwrapper.card.core.AuxiliaryData
+import com.governikus.ausweisapp.sdkwrapper.card.core.Card
+import com.governikus.ausweisapp.sdkwrapper.card.core.CertificateDescription
+import com.governikus.ausweisapp.sdkwrapper.card.core.CertificateValidity
+import com.governikus.ausweisapp.sdkwrapper.card.core.Reader
+import com.governikus.ausweisapp.sdkwrapper.card.core.VersionInfo
+import com.governikus.ausweisapp.sdkwrapper.card.core.WorkflowProgress
+import com.governikus.ausweisapp.sdkwrapper.card.core.WorkflowProgressType
+import com.governikus.ausweisapp.sdkwrapper.card.core.ausweisapp.protocol.Message
 import java.text.SimpleDateFormat
 import java.util.Locale
 

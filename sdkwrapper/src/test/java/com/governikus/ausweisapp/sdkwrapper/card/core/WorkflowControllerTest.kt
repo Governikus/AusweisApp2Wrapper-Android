@@ -2,18 +2,18 @@
  * Copyright (c) 2020-2023 Governikus GmbH & Co. KG, Germany
  */
 
-package de.governikus.ausweisapp2.sdkwrapper.card.core
+package com.governikus.ausweisapp.sdkwrapper.card.core
 
 import android.content.Context
 import android.net.Uri
 import android.nfc.Tag
 import com.google.gson.Gson
-import de.governikus.ausweisapp2.sdkwrapper.SDKWrapper
-import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.Accept
-import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.Command
-import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.Message
-import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.RunAuth
-import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.SetPin
+import com.governikus.ausweisapp.sdkwrapper.SDKWrapper
+import com.governikus.ausweisapp.sdkwrapper.card.core.ausweisapp.protocol.Accept
+import com.governikus.ausweisapp.sdkwrapper.card.core.ausweisapp.protocol.Command
+import com.governikus.ausweisapp.sdkwrapper.card.core.ausweisapp.protocol.Message
+import com.governikus.ausweisapp.sdkwrapper.card.core.ausweisapp.protocol.RunAuth
+import com.governikus.ausweisapp.sdkwrapper.card.core.ausweisapp.protocol.SetPin
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -319,9 +319,7 @@ internal class MockSdkConnection : WorkflowController.SdkConnection {
         isConnected = false
     }
 
-    override fun updateNfcTag(tag: Tag): Boolean {
-        return false
-    }
+    override fun updateNfcTag(tag: Tag): Boolean = false
 
     override fun <T : Command> send(command: T): Boolean {
         SDKWrapper.launch {

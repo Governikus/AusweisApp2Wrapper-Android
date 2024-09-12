@@ -2,7 +2,7 @@
  * Copyright (c) 2020-2023 Governikus GmbH & Co. KG, Germany
  */
 
-package de.governikus.ausweisapp2.sdkwrapper.card.core.util
+package com.governikus.ausweisapp.sdkwrapper.card.core.util
 
 internal val NUMBER_REGEX = Regex("[0-9]+")
 

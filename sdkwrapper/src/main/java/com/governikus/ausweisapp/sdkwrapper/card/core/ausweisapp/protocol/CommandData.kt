@@ -1,4 +1,4 @@
-package de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol
+package com.governikus.ausweisapp.sdkwrapper.card.core.ausweisapp.protocol
 
 internal data class Simulator(
     val files: List<SimulatorFile>,

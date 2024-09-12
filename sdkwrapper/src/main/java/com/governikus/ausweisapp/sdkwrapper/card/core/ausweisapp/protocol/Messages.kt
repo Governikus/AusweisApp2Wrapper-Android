@@ -2,7 +2,7 @@
  * Copyright (c) 2020-2023 Governikus GmbH & Co. KG, Germany
  */
 
-package de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol
+package com.governikus.ausweisapp.sdkwrapper.card.core.ausweisapp.protocol
 
 import com.google.gson.annotations.SerializedName
 

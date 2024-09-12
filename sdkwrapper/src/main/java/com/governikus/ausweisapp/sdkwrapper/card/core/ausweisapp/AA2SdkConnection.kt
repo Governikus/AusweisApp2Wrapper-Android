@@ -2,7 +2,7 @@
  * Copyright (c) 2020-2023 Governikus GmbH & Co. KG, Germany
  */
 
-package de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2
+package com.governikus.ausweisapp.sdkwrapper.card.core.ausweisapp
 
 import android.content.ComponentName
 import android.content.Context
@@ -14,11 +14,11 @@ import android.os.RemoteException
 import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
+import com.governikus.ausweisapp.sdkwrapper.card.core.WorkflowController
+import com.governikus.ausweisapp.sdkwrapper.card.core.ausweisapp.protocol.Command
+import com.governikus.ausweisapp.sdkwrapper.card.core.ausweisapp.protocol.Message
 import com.governikus.ausweisapp2.IAusweisApp2Sdk
 import com.governikus.ausweisapp2.IAusweisApp2SdkCallback
-import de.governikus.ausweisapp2.sdkwrapper.card.core.WorkflowController
-import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.Command
-import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.protocol.Message
 
 internal class AA2SdkConnection : WorkflowController.SdkConnection {
     private var context: Context? = null
@@ -77,7 +77,7 @@ internal class AA2SdkConnection : WorkflowController.SdkConnection {
                         sdk?.connectSdk(sdkCallback)
                         onConnected?.invoke()
                     } catch (e: RemoteException) {
-                        Log.d(TAG, "Could not connect to ausweisapp2 sdk", e)
+                        Log.d(TAG, "Could not connect to ausweisapp sdk", e)
                         onConnectionFailed?.invoke()
                     }
                 }

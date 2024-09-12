@@ -2,7 +2,7 @@
  * Copyright (c) 2020-2023 Governikus GmbH & Co. KG, Germany
  */
 
-package de.governikus.ausweisapp2.sdkwrapper.card.core
+package com.governikus.ausweisapp.sdkwrapper.card.core
 
 import android.app.Activity
 import android.nfc.NfcAdapter.FLAG_READER_NFC_A

@@ -2,10 +2,10 @@
  * Copyright (c) 2020-2023 Governikus GmbH & Co. KG, Germany
  */
 
-package de.governikus.ausweisapp2.sdkwrapper
+package com.governikus.ausweisapp.sdkwrapper
 
-import de.governikus.ausweisapp2.sdkwrapper.card.core.WorkflowController
-import de.governikus.ausweisapp2.sdkwrapper.card.core.ausweisapp2.AA2SdkConnection
+import com.governikus.ausweisapp.sdkwrapper.card.core.WorkflowController
+import com.governikus.ausweisapp.sdkwrapper.card.core.ausweisapp.AA2SdkConnection
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 
