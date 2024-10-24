@@ -115,7 +115,7 @@ branches.each { branch ->
                         predefinedProp('REVIEWBOARD_REVIEW_BRANCH', "${branch}")
                         predefinedProp('aarSource', "${branch}_Android_AAR")
                         predefinedProp('performSonarScan', "true")
-                        predefinedProp('mavenPublishSnapshot', "true")
+                        predefinedProp('publish', "snapshot")
                     }
                 }
             }
@@ -146,6 +146,27 @@ job("SDKWrapper_Android_Release") {
     parameters {
         stringParam( 'changeset', '', 'Build given changeset (tag) as release' )
         choiceParam( 'aarSource', ['maven', 'Release_Android_AAR'], 'Source of the AAR.')
+        reactiveChoice {
+            name ('actions')
+            description('Upload to maven central repository')
+            filterable(false)
+            choiceType('PT_CHECKBOX')
+            script {
+                groovyScript {
+                    script {
+                        script("if (aarSource.equals('maven')) { return ['release:selected', 'central'] } else { return ['release:selected', 'central:disabled'] }")
+                        sandbox(true)
+                    }
+                    fallbackScript {
+                        script("return ['SCRIPT ERROR:disabled']")
+                        sandbox(true)
+                    }
+                }
+            }
+            referencedParameters('aarSource')
+            randomName('')
+            filterLength(0)
+        }
     }
     wrappers {
         preBuildCleanup() {
@@ -165,7 +186,7 @@ job("SDKWrapper_Android_Release") {
                     unstable('UNSTABLE')
                 }
                 parameters {
-                    predefinedProp('publishRelease', 'true')
+                    predefinedProp('publish', '$actions')
                     predefinedProp('REVIEWBOARD_REVIEW_BRANCH', '$changeset')
                     predefinedProp('aarSource', '$aarSource')
                 }
@@ -181,9 +202,9 @@ job("SDKWrapper_Android_Release") {
         archiveArtifacts {
             allowEmpty(false)
             onlyIfSuccessful(true)
-            pattern('**/outputs/apk/**/*.apk')
-            pattern('**/outputs/aar/**/*.aar')
+            pattern('dist/**/*')
             pattern('build/tar/*.tgz')
+            pattern('**/outputs/apk/**/*.apk')
         }
     }
 }

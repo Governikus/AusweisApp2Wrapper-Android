@@ -37,7 +37,7 @@ class NfcForegroundDispatcher(
             return
         }
         isStarted = true
-        nfcAdapter.enableReaderMode(
+        nfcAdapter?.enableReaderMode(
             activity,
             { tag: Tag ->
                 if (tag.techList.contains(nfcTechnology)) {
@@ -59,6 +59,6 @@ class NfcForegroundDispatcher(
             return
         }
         isStarted = false
-        nfcAdapter.disableReaderMode(activity)
+        nfcAdapter?.disableReaderMode(activity)
     }
 }

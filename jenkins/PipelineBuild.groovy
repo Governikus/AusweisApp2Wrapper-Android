@@ -9,8 +9,7 @@ pipeline {
         string( name: 'REVIEWBOARD_STATUS_UPDATE_ID', defaultValue: '', description: '' )
         string( name: 'REVIEWBOARD_DIFF_REVISION', defaultValue: '', description: '' )
         booleanParam( name: 'performSonarScan', defaultValue: false, description: 'Perform a sonar scan')
-        booleanParam( name: 'mavenPublishSnapshot', defaultValue: false, description: 'Publish snapshot artifacts to maven repository')
-        booleanParam( name: 'publishRelease', defaultValue: false, description: 'Publish release')
+        string( name: 'publish', defaultValue: '', description: 'Publish (snapshot | release | central) repository')
         string( name: 'aarSource', defaultValue: 'maven', description: 'Source of the AAR.\nExamples: maven, Release_Android_AAR, default_Review_Android_AAR, default_Android_AAR' )
     }
     options {
@@ -92,41 +91,36 @@ pipeline {
             when { expression { params.performSonarScan } }
             steps {
                 script {
-                    if (params.REVIEWBOARD_REVIEW_ID != '') {
-                        sh './gradlew sonar -Dsonar.plugins.downloadOnlyRequired=false -Dsonar.scanner.metadataFilePath=${WORKSPACE}/tmp/sonar-metadata.txt -Dsonar.pullrequest.key=${REVIEWBOARD_REVIEW_ID} -Dsonar.pullrequest.branch=${REVIEWBOARD_REVIEW_ID} -Dsonar.pullrequest.base=${REVIEWBOARD_REVIEW_BRANCH} -Dsonar.token=${SONARQUBE_TOKEN} -Dsonar.qualitygate.wait=true -Dsonar.qualitygate.timeout=90'
-                    } else {
-                        sh './gradlew sonar -Dsonar.plugins.downloadOnlyRequired=false -Dsonar.branch.name=${REVIEWBOARD_REVIEW_BRANCH} -Dsonar.token=${SONARQUBE_TOKEN}'
-                    }
+                    def pullRequestParams = params.REVIEWBOARD_REVIEW_ID != '' ? '-Dsonar.pullrequest.key=${REVIEWBOARD_REVIEW_ID} -Dsonar.pullrequest.branch=${REVIEWBOARD_REVIEW_ID} -Dsonar.pullrequest.base=${REVIEWBOARD_REVIEW_BRANCH}' : '-Dsonar.branch.name=${REVIEWBOARD_REVIEW_BRANCH}'
+                    sh "./gradlew sonar -Dsonar.plugins.downloadOnlyRequired=false -Dsonar.scanner.metadataFilePath=${WORKSPACE}/tmp/sonar-metadata.txt -Dsonar.projectName=AusweisApp-SDKWrapper-Android ${pullRequestParams} -Dsonar.token=${SONARQUBE_TOKEN} -Dsonar.qualitygate.wait=true -Dsonar.qualitygate.timeout=90"
                 }
             }
         }
         stage('Package') {
             steps {
                 sh './gradlew assemble'
+                sh "./gradlew -Dmaven.repo.local=${WORKSPACE}/dist publishReleasePublicationToMavenLocal"
+            }
+        }
+        stage('Publish snapshot') {
+            when { expression { params.publish.contains('snapshot') } }
+            steps {
+                sh './gradlew publishSnapshotPublicationToNexusSnapshotRepository'
             }
         }
         stage('Publish release') {
-            when { expression { params.publishRelease } }
+            when { expression { params.publish.contains('release') } }
             steps {
-                sh './gradlew publishReleasePublicationToLocalRepository'
+                sh './gradlew publishReleasePublicationToNexusReleaseRepository'
             }
         }
-        stage('Maven snapshot publish') {
-            when { expression { params.mavenPublishSnapshot } }
-            environment {
-                NEXUS_URL = 'https://repo.govkg.de/repository/ausweisapp-snapshots'
+        stage('Publish Maven') {
+            when {
+                expression { params.publish.contains('central') }
+                equals expected: 'maven', actual: params.aarSource
             }
             steps {
-                sh './gradlew publishSnapshotPublicationToNexusRepository'
-            }
-        }
-        stage('Maven release publish') {
-            when { equals expected: 'maven', actual: params.aarSource }
-            environment {
-                NEXUS_URL = 'https://repo.govkg.de/repository/ausweisapp-releases'
-            }
-            steps {
-                sh './gradlew publishReleasePublicationToNexusRepository'
+                sh './gradlew publishReleasePublicationToCentralRepository'
             }
         }
         stage('Tarball') {
@@ -138,6 +132,7 @@ pipeline {
             steps {
                 archiveArtifacts artifacts: '**/outputs/apk/**/*.apk', allowEmptyArchive: true
                 archiveArtifacts artifacts: '**/outputs/aar/**/*.aar'
+                archiveArtifacts artifacts: 'dist/**/*', excludes: '**/*.xml', allowEmptyArchive: true
                 archiveArtifacts artifacts: 'build/tar/*.tgz'
             }
         }

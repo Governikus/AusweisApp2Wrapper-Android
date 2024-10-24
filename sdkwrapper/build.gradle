@@ -4,6 +4,7 @@ apply plugin: 'kotlin-parcelize'
 apply plugin: 'kotlin-kapt'
 apply plugin: "org.jmailen.kotlinter"
 apply plugin: 'maven-publish'
+apply plugin: 'signing'
 
 android {
     compileSdk 35
@@ -75,60 +76,83 @@ task sourceJar(type: Jar) {
 }
 
 afterEvaluate {
+    if (System.getenv("GPG_ID")) {
+        signing {
+            setProperty("signing.gnupg.keyName", System.getenv("GPG_ID")[-8..-1])
+            setProperty("signing.gnupg.passphrase", System.getenv("GPG_PSW"))
+            useGpgCmd()
+            sign publishing.publications
+        }
+    }
     publishing {
         repositories {
             maven {
-                name = 'Local'
-                url "$project.rootDir/build/dist/libs"
-            }
-            maven {
-                name = 'Nexus'
+                name = 'NexusSnapshot'
                 credentials {
                     username System.getenv("NEXUS_USERNAME")
                     password System.getenv("NEXUS_PSW")
                 }
-                url = System.getenv("NEXUS_URL")
+                url = "https://repo.govkg.de/repository/ausweisapp-snapshots"
+            }
+            maven {
+                name = 'NexusRelease'
+                credentials {
+                    username System.getenv("NEXUS_USERNAME")
+                    password System.getenv("NEXUS_PSW")
+                }
+                url = "https://repo.govkg.de/repository/ausweisapp-releases"
+            }
+            maven {
+                name = 'Central'
+                credentials {
+                    username System.getenv("CENTRAL_USERNAME")
+                    password System.getenv("CENTRAL_PSW")
+                }
+                url = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2"
+            }
+        }
+        publications.all {
+            publication -> pom {
+                name = 'AusweisApp2 SDK Wrapper'
+                description = 'Convenient authentication SDK'
+                url = 'https://www.governikus.de'
+                licenses {
+                    license {
+                        name = 'EUPL-v1.2'
+                        url = 'https://eupl.eu/1.2/en/'
+                    }
+                }
+                developers {
+                    developer {
+                        email = 'support@ausweisapp.de'
+                        organization = 'Governikus'
+                        organizationUrl = 'https://www.governikus.de/'
+                        timezone = 'Europe/Berlin'
+                    }
+                }
+                scm {
+                    url = 'https://github.com/Governikus/AusweisApp2Wrapper-Android'
+                }
             }
         }
         publications {
             snapshot(MavenPublication) {
                 from components.release
+
                 groupId = 'com.governikus.ausweisapp'
                 artifactId = 'sdkwrapper'
                 version = "${sdkwrapper_version}-SNAPSHOT"
 
                 artifact(sourceJar)
-
-                pom {
-                    licenses {
-                        license {
-                            name = 'EUPL-v1.2'
-                            url = 'https://eupl.eu/1.2/en/'
-                        }
-                    }
-                }
             }
             release(MavenPublication) {
                 from components.release
-                pom {
-                    name = 'AusweisApp2 SDK Wrapper'
-                    description = 'Convenient authentication SDK'
-                    url = 'https://www.governikus.de'
-                }
+
                 groupId = 'com.governikus.ausweisapp'
                 artifactId = 'sdkwrapper'
                 version = sdkwrapper_version
 
                 artifact(sourceJar)
-
-                pom {
-                    licenses {
-                        license {
-                            name = 'EUPL-v1.2'
-                            url = 'https://eupl.eu/1.2/en/'
-                        }
-                    }
-                }
             }
         }
     }
